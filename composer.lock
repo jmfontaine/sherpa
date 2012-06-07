@@ -1,0 +1,28 @@
+{
+    "hash": "f47d3e101c950286508a47e94be96a97",
+    "packages": [
+        {
+            "package": "symfony/console",
+            "version": "2.0.x-dev",
+            "source-reference": "v2.0.14"
+        },
+        {
+            "package": "symfony/process",
+            "version": "2.0.x-dev",
+            "source-reference": "cfeeff8ab95b41905c8c19a63d5d11502ce9b309"
+        },
+        {
+            "package": "symfony/yaml",
+            "version": "2.0.x-dev",
+            "source-reference": "7eb70264627e696aa7d2825a88d7cef053e8a302"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ]
+}
