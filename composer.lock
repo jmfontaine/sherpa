@@ -1,5 +1,5 @@
 {
-    "hash": "f47d3e101c950286508a47e94be96a97",
+    "hash": "dda1912f4b0635995420cff24ce91dc3",
     "packages": [
         {
             "package": "symfony/console",
@@ -15,6 +15,17 @@
             "package": "symfony/yaml",
             "version": "2.0.x-dev",
             "source-reference": "7eb70264627e696aa7d2825a88d7cef053e8a302"
+        },
+        {
+            "package": "twig/twig",
+            "version": "dev-master",
+            "alias-pretty-version": "1.8.x-dev",
+            "alias-version": "1.8.9999999.9999999-dev"
+        },
+        {
+            "package": "twig/twig",
+            "version": "dev-master",
+            "source-reference": "6d072640c44f1781049afd2d96060c72da80662a"
         }
     ],
     "packages-dev": null,
