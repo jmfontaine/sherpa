@@ -42,6 +42,11 @@ class PluginManager
         return $this->plugins[$name];
     }
 
+    public function getPlugins()
+    {
+        return $this->plugins;
+    }
+
     public function process($iterator, $rootPath)
     {
         $data = array();
@@ -50,6 +55,9 @@ class PluginManager
         $data['project'] = array(
             'rootPath' => realpath($rootPath),
         );
+
+        // Active plugins
+        $data['plugins'] = $this->plugins;
 
         // Items data
         foreach ($iterator as $item) {
