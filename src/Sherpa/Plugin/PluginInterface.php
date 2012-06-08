@@ -16,6 +16,10 @@ interface PluginInterface
 
     public function analyze(\SplFileInfo $item);
 
+    public function getName();
+
+    public function getVersion();
+
     public function loadConfig(array $config);
 }
 

@@ -41,6 +41,16 @@ class OhcountPlugin extends AbstractPlugin
         return $data;
     }
 
+    public function getName()
+    {
+        return 'Ohcount';
+    }
+
+    public function getVersion()
+    {
+        return '0.1-dev';
+    }
+
     private function parseLineCountOutput($output)
     {
         $data  = array();

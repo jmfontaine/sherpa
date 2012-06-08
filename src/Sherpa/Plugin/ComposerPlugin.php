@@ -27,6 +27,16 @@ class ComposerPlugin extends AbstractPlugin
         return true;
     }
 
+    public function getName()
+    {
+        return 'Composer';
+    }
+
+    public function getVersion()
+    {
+        return '0.1-dev';
+    }
+
     public function analyze(\SplFileInfo $item)
     {
         return array(
@@ -36,4 +46,3 @@ class ComposerPlugin extends AbstractPlugin
         );
     }
 }
-
