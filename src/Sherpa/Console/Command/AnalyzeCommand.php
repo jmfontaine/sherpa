@@ -10,6 +10,7 @@
  */
 namespace Sherpa\Console\Command;
 
+use Sherpa\Iterator\ProjectIterator;
 use Sherpa\Plugin\PluginManager;
 use Sherpa\Renderer\RendererManager;
 use Symfony\Component\Console\Command\Command;
@@ -54,7 +55,7 @@ class AnalyzeCommand extends Command
 
         $pluginManager = new PluginManager($config['plugins']);
         $path          = $input->getArgument('path');
-        $iterator      = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        $iterator      = new ProjectIterator($path);
         $data          = $pluginManager->process($iterator, $path);
 
         $rendererManager = new RendererManager($config['renderers']);

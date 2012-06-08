@@ -42,7 +42,7 @@ class PluginManager
         return $this->plugins[$name];
     }
 
-    public function process(\Iterator $iterator, $rootPath)
+    public function process($iterator, $rootPath)
     {
         $data = array();
 
@@ -52,12 +52,9 @@ class PluginManager
         );
 
         // Items data
-        $pathNameOffset = strlen($rootPath);
         foreach ($iterator as $item) {
-            $relativeItemPathName = substr($item->getPathName(), $pathNameOffset);
-
             // Item data
-            $data['items'][$relativeItemPathName] = array(
+            $data['items'][$item->getRelativePathname()] = array(
                 'accessTime'       => $item->getATime(),
                 'modificationTime' => $item->getMTime(),
                 'permissions'      => $item->getPerms(),
@@ -76,7 +73,7 @@ class PluginManager
                     continue;
                 }
 
-                $data['items'][$relativeItemPathName]['plugins'][$pluginName] = $plugin->analyze($item);
+                $data['items'][$item->getRelativePathname()]['plugins'][$pluginName] = $plugin->analyze($item);
             }
         }
 
