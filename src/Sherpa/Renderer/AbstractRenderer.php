@@ -22,7 +22,7 @@ abstract class AbstractRenderer implements RendererInterface
     public function loadParameters(array $parameters)
     {
         foreach ($parameters as $parameterName => $parameterValue) {
-            $methodName = 'set' . ucwords(str_replace('_', ' ', $parameterName));
+            $methodName = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $parameterName)));
 
             if (!method_exists($this, $methodName)) {
                 throw new \OutOfBoundsException("Invalid parameter ($parameterName)");
