@@ -12,6 +12,8 @@ namespace Sherpa;
 
 class SplFileInfo extends \SplFileInfo
 {
+    private $fileInfo;
+
     private $relativePath;
 
     private $relativePathname;
@@ -22,6 +24,27 @@ class SplFileInfo extends \SplFileInfo
 
         $this->relativePath     = $relativePath;
         $this->relativePathname = $relativePathname;
+
+        $this->fileInfo = new \finfo();
+    }
+
+    public function getContent()
+    {
+        if ('file' === $this->getType()) {
+            return file_get_contents($this->getPathname());
+        }
+
+        throw new \LogicException('Content can only be retrieved for a file');
+    }
+
+    public function getEncoding()
+    {
+        return $this->fileInfo->file($this->getPathname(), FILEINFO_MIME_ENCODING | FILEINFO_PRESERVE_ATIME);
+    }
+
+    public function getMimeType()
+    {
+        return $this->fileInfo->file($this->getPathname(), FILEINFO_MIME_TYPE | FILEINFO_PRESERVE_ATIME);
     }
 
     public function getRelativePath()

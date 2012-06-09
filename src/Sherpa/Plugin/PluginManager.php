@@ -64,6 +64,8 @@ class PluginManager
             // Item data
             $data['items'][$item->getRelativePathname()] = array(
                 'accessTime'       => $item->getATime(),
+                'encoding'         => $item->getEncoding(),
+                'mimeType'         => $item->getMimeType(),
                 'modificationTime' => $item->getMTime(),
                 'path'             => $item->getPath(),
                 'pathname'         => $item->getPathname(),
