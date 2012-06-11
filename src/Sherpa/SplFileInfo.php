@@ -64,6 +64,17 @@ class SplFileInfo extends \SplFileInfo
         return $this->getPluginManager()->getPlugin($pluginName)->analyze($this);
     }
 
+    public function getPlugins()
+    {
+        $data = array();
+
+        foreach ($this->getPluginManager()->getPlugins() as $plugin) {
+            $data[$plugin->getCode()] = $plugin->analyze($this);
+        }
+
+        return $data;
+    }
+
     public function toArray()
     {
         $data = array(
