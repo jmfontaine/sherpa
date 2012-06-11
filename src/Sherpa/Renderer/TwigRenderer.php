@@ -10,6 +10,7 @@
  */
 namespace Sherpa\Renderer;
 
+use Sherpa\FileSystem;
 use Sherpa\Report\Report;
 
 class TwigRenderer extends AbstractRenderer
@@ -52,8 +53,11 @@ class TwigRenderer extends AbstractRenderer
             $twig->addExtension(new \Twig_Extension_Debug());
         }
 
-        $context = array('report' => $report);
-        echo $twig->render('index.twig', $context);
+        $destinationDirectory = $this->getDestination();
+
+        $this->prepareDestinationDirectory($destinationDirectory);
+        $this->renderTemplates($twig, $report, $themeDirectory, $destinationDirectory);
+        $this->copyAssets($themeDirectory, $destinationDirectory);
     }
 
     public function setCharset($charset)
@@ -114,6 +118,40 @@ class TwigRenderer extends AbstractRenderer
     public function getDebug()
     {
         return $this->debug;
+    }
+
+    protected function prepareDestinationDirectory($path)
+    {
+        $fileSystem = new FileSystem();
+
+        // Empty destination directory if it exists…
+        if (file_exists($path)) {
+            $fileSystem->emptyDirectory($path);
+        } else {
+            // …otherwise create it
+            mkdir($path);
+        }
+    }
+
+    protected function renderTemplates(\Twig_Environment $twig, Report $report, $themeDirectory, $destinationDirectory)
+    {
+        foreach (glob("$themeDirectory/*.twig") as $templatePath) {
+            $templateName = basename($templatePath);
+            $destinationFile = substr($templateName, 0, -4) . 'html';
+
+            $html = $twig->render($templateName, array('report' => $report));
+            file_put_contents($destinationDirectory . '/' . $destinationFile, $html);
+        }
+    }
+
+    protected function copyAssets($themeDirectory, $destinationDirectory)
+    {
+        if (!file_exists($themeDirectory . '/assets')) {
+            return;
+        }
+
+        $fileSystem = new FileSystem();
+        $fileSystem->copyDirectory($themeDirectory . '/assets', $destinationDirectory . '/assets');
     }
 }
 

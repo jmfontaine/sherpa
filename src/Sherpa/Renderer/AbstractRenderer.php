@@ -39,9 +39,19 @@ abstract class AbstractRenderer implements RendererInterface
         return $this;
     }
 
-    public function getDestination()
+    public function getDestination($realPath = true)
     {
-        return $this->destination;
+        $destination = $this->destination;
+
+        if ($realPath) {
+            $destination = realPath($destination);
+
+            if (false === $destination) {
+                throw new \RuntimeException("Invalid destination path ($this->destination)");
+            }
+        }
+
+        return $destination;
     }
 }
 
