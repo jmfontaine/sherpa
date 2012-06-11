@@ -10,11 +10,12 @@
  */
 namespace Sherpa\Plugin;
 
+use Sherpa\SplFileInfo;
 use Symfony\Component\Process\Process;
 
 class ComposerPlugin extends AbstractPlugin
 {
-    public function accept(\SplFileInfo $item)
+    public function accept(SplFileInfo $item)
     {
         if ('file' !== $item->getType()) {
             return false;
@@ -42,7 +43,7 @@ class ComposerPlugin extends AbstractPlugin
         return '0.1-dev';
     }
 
-    public function analyze(\SplFileInfo $item)
+    public function analyze(SplFileInfo $item)
     {
         return array(
             'isDefinitionFile' => 'composer.json' === $item->getFilename(),

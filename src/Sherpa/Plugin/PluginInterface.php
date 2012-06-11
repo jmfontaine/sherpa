@@ -10,11 +10,13 @@
  */
 namespace Sherpa\Plugin;
 
+use Sherpa\SplFileInfo;
+
 interface PluginInterface
 {
-    public function accept(\SplFileInfo $item);
+    public function accept(SplFileInfo $item);
 
-    public function analyze(\SplFileInfo $item);
+    public function analyze(SplFileInfo $item);
 
     public function getCode();
 

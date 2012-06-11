@@ -10,6 +10,8 @@
  */
 namespace Sherpa\Plugin;
 
+use Sherpa\SplFileInfo;
+
 abstract class AbstractPlugin implements PluginInterface
 {
     public function __construct(array $config)
@@ -17,12 +19,12 @@ abstract class AbstractPlugin implements PluginInterface
         $this->loadConfig($config);
     }
 
-    public function accept(\SplFileInfo $item)
+    public function accept(SplFileInfo $item)
     {
         return true;
     }
 
-    public function isInVcsDirectory(\SplFileInfo $item)
+    public function isInVcsDirectory(SplFileInfo $item)
     {
         // Bazaar
         if (false !== strpos($item->getPathName(), '.bzr/')) {
