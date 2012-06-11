@@ -59,7 +59,7 @@ class SplFileInfo extends \SplFileInfo
         return substr($this->getRealPath(), $offset);
     }
 
-    public function getPluginData($pluginName)
+    public function getPlugin($pluginName)
     {
         return $this->getPluginManager()->getPlugin($pluginName)->analyze($this);
     }
