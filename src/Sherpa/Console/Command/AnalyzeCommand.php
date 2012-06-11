@@ -13,6 +13,9 @@ namespace Sherpa\Console\Command;
 use Sherpa\Iterator\ProjectIterator;
 use Sherpa\Plugin\PluginManager;
 use Sherpa\Renderer\RendererManager;
+use Sherpa\Report\Report;
+use Sherpa\Report\Section\ProjectSection;
+use Sherpa\Report\Section\PluginsSection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -53,13 +56,15 @@ class AnalyzeCommand extends Command
             $output->writeln($exception->getMessage());
         }
 
-        $pluginManager = new PluginManager($config['plugins']);
-        $path          = $input->getArgument('path');
-        $iterator      = new ProjectIterator($path);
-        $data          = $pluginManager->process($iterator, $path);
+        $pluginManager   = new PluginManager($config['plugins']);
+        $path            = $input->getArgument('path');
+        $projectIterator = new ProjectIterator($path, $pluginManager);
+
+        $report = new Report($projectIterator, $pluginManager, $config);
+        $report->getProject()->setPath($path);
 
         $rendererManager = new RendererManager($config['renderers']);
-        $rendererManager->render($data);
+        $rendererManager->render($report);
     }
 
     protected function getDefaultConfigPath()

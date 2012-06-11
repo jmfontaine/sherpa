@@ -10,6 +10,8 @@
  */
 namespace Sherpa\Renderer;
 
+use Sherpa\Report\Report;
+
 class RendererManager
 {
     private $renderers = array();
@@ -42,10 +44,10 @@ class RendererManager
         return $this->renderers[$name];
     }
 
-    public function render(array $data)
+    public function render(Report $report)
     {
         foreach ($this->renderers as $renderer) {
-            $renderer->render($data);
+            $renderer->render($report);
         }
     }
 

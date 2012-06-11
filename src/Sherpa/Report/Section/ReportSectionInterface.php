@@ -8,12 +8,13 @@
  * @copyright 2012 Jean-Marc Fontaine <jm@jmfontaine.net>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
-namespace Sherpa\Renderer;
+namespace Sherpa\Report\Section;
 
-use Sherpa\Report\Report;
-
-interface RendererInterface
+interface ReportSectionInterface
 {
-    public function render(Report $report);
+    /**
+     * @abstract
+     * @return array
+     */
+    public function toArray();
 }
-

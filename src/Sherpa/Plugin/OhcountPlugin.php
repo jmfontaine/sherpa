@@ -41,6 +41,11 @@ class OhcountPlugin extends AbstractPlugin
         return $data;
     }
 
+    public function getCode()
+    {
+        return 'ohcount';
+    }
+
     public function getName()
     {
         return 'Ohcount';

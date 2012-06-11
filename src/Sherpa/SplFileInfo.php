@@ -10,22 +10,27 @@
  */
 namespace Sherpa;
 
+use Sherpa\Plugin\PluginManager;
+
 class SplFileInfo extends \SplFileInfo
 {
     private $fileInfo;
 
-    private $relativePath;
+    private $pluginManager;
 
-    private $relativePathname;
+    private $projectRootPath;
 
-    public function __construct($filePath, $relativePath, $relativePathname)
+    public function __construct($filePath, PluginManager $pluginManager, $projectRootPath, \finfo $fileInfo = null)
     {
         parent::__construct($filePath);
 
-        $this->relativePath     = $relativePath;
-        $this->relativePathname = $relativePathname;
+        $this->pluginManager   = $pluginManager;
+        $this->projectRootPath = $projectRootPath;
 
-        $this->fileInfo = new \finfo();
+        if (null === $fileInfo) {
+            $fileInfo = new \finfo();
+        }
+        $this->fileInfo = $fileInfo;
     }
 
     public function getContent()
@@ -49,11 +54,74 @@ class SplFileInfo extends \SplFileInfo
 
     public function getRelativePath()
     {
-        return $this->relativePath;
+        $offset = strlen($this->projectRootPath);
+
+        return substr($this->getRealPath(), $offset);
     }
 
-    public function getRelativePathname()
+    public function getPluginData($pluginName)
     {
-        return $this->relativePathname;
+        return $this->getPluginManager()->getPlugin($pluginName)->analyze($this);
+    }
+
+    public function toArray()
+    {
+        $data = array(
+            'access_time'       => $this->getATime(),
+            'basename'          => $this->getBasename(),
+            'change_time'       => $this->getCTime(),
+            'encoding'          => $this->getEncoding(),
+            'extension'         => $this->getExtension(),
+            'filename'          => $this->getFilename(),
+            'group'             => $this->getGroup(),
+            'inode'             => $this->getInode(),
+            'mime_type'         => $this->getMimeType(),
+            'modification_time' => $this->getMTime(),
+            'owner'             => $this->getOwner(),
+            'path'              => $this->getPath(),
+            'pathname'          => $this->getPathname(),
+            'perms'             => $this->getPerms(),
+            'relative_path'     => $this->getRelativePath(),
+            'size'              => $this->getSize(),
+            'type'              => $this->getType(),
+        );
+
+        $data['link_target'] = $this->isLink() ? $this->getLinkTarget() : null;
+
+        foreach ($this->getPluginManager()->getPlugins() as $plugin) {
+            $data['plugins'][$plugin->getCode()] = $plugin->analyze($this);
+        }
+        return $data;
+    }
+
+    protected function getPluginManager()
+    {
+        return $this->pluginManager;
+    }
+
+    protected function setFileInfo(\finfo $fileInfo)
+    {
+        $this->fileInfo = $fileInfo;
+
+        return $this;
+    }
+
+    protected function setPluginManager(PluginManager $pluginManager)
+    {
+        $this->pluginManager = $pluginManager;
+
+        return $this;
+    }
+
+    protected function setProjectRootPath($projectRootPath)
+    {
+        $this->projectRootPath = $projectRootPath;
+
+        return $this;
+    }
+
+    protected function getProjectRootPath()
+    {
+        return $this->projectRootPath;
     }
 }

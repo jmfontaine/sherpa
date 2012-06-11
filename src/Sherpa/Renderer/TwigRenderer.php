@@ -10,41 +10,50 @@
  */
 namespace Sherpa\Renderer;
 
+use Sherpa\Report\Report;
+
 class TwigRenderer extends AbstractRenderer
 {
     private $cache = false;
 
     private $charset = 'utf-8';
 
+    private $debug = false;
+
     private $strictVariables = false;
 
-    private $templatePath;
+    private $theme = 'default';
 
-    public function render(array $data)
+    public function render(Report $report)
     {
-        $templateDirectory = dirname($this->getTemplatePath());
-        $templateFilename  = basename($this->getTemplatePath());
+        $sherpaThemesDirectory = realpath(__DIR__ . '/../../../themes');
+        $themeName             = $this->getTheme();
+        $themeDirectory        = $sherpaThemesDirectory . '/' . $themeName;
 
-        $loader = new \Twig_Loader_Filesystem($templateDirectory);
+        // Is the theme shipped wth Sherpa?
+        if (!file_exists($themeDirectory)) {
+            // Then maybe we have be given the directory containing the theme
+            $themeDirectory = realpath($themeName);
+            if (false === $themeDirectory) {
+                throw new \RuntimeException("Could not load the theme ($themeName)");
+            }
+        }
+
+        $loader = new \Twig_Loader_Filesystem($themeDirectory);
         $twig = new \Twig_Environment($loader, array(
             'cache'            => $this->getCache(),
             'charset'          => $this->getCharset(),
-            'strict_variables' => $this->getStrictVariables()
+            'debug'            => $this->getDebug(),
+            'strict_variables' => $this->getStrictVariables(),
         ));
+        $twig->addExtension(new \Sherpa\Twig\Extension\Core());
 
-        echo $twig->render($templateFilename, array('data' => $data));
-    }
+        if ($this->getDebug()) {
+            $twig->addExtension(new \Twig_Extension_Debug());
+        }
 
-    public function setTemplatePath($templatePath)
-    {
-        $this->templatePath = $templatePath;
-
-        return $this;
-    }
-
-    public function getTemplatePath()
-    {
-        return $this->templatePath;
+        $context = array('report' => $report);
+        echo $twig->render('index.twig', $context);
     }
 
     public function setCharset($charset)
@@ -81,6 +90,30 @@ class TwigRenderer extends AbstractRenderer
     public function getStrictVariables()
     {
         return $this->strictVariables;
+    }
+
+    public function setTheme($theme)
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
+    public function getTheme()
+    {
+        return $this->theme;
+    }
+
+    public function setDebug($debug)
+    {
+        $this->debug = $debug;
+
+        return $this;
+    }
+
+    public function getDebug()
+    {
+        return $this->debug;
     }
 }
 

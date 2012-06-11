@@ -10,11 +10,13 @@
  */
 namespace Sherpa\Renderer;
 
+use Sherpa\Report\Report;
+
 class JsonRenderer extends AbstractRenderer
 {
-    public function render(array $data)
+    public function render(Report $report)
     {
-        file_put_contents($this->getDestination(), json_encode($data));
+        file_put_contents($this->getDestination(), json_encode($report->toArray()));
     }
 }
 

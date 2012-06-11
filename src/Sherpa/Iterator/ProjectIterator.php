@@ -10,18 +10,29 @@
  */
 namespace Sherpa\Iterator;
 
+use Sherpa\Plugin\PluginManager;
+
 class ProjectIterator implements \IteratorAggregate
 {
     private $path;
 
-    public function __construct($path)
+    private $pluginManager;
+
+    public function __construct($path, PluginManager $pluginManager)
     {
-        $this->setPath($path);
+        $this->setPath($path)
+             ->setPluginManager($pluginManager);
     }
 
     public function getIterator()
     {
-        $directoryIterator = new RecursiveDirectoryIterator($this->getPath());
+        // We must pass path twice since project root path is the same
+        // than iterator path for the parent iterator but not for its children
+        $directoryIterator = new RecursiveDirectoryIterator(
+            $this->getPath(),
+            $this->getPluginManager(),
+            realpath($this->getPath())
+        );
 
         return new \RecursiveIteratorIterator($directoryIterator);
     }
@@ -36,6 +47,18 @@ class ProjectIterator implements \IteratorAggregate
     public function getPath()
     {
         return $this->path;
+    }
+
+    public function setPluginManager(PluginManager $pluginManager)
+    {
+        $this->pluginManager = $pluginManager;
+
+        return $this;
+    }
+
+    public function getPluginManager()
+    {
+        return $this->pluginManager;
     }
 }
 

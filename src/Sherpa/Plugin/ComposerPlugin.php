@@ -27,6 +27,11 @@ class ComposerPlugin extends AbstractPlugin
         return true;
     }
 
+    public function getCode()
+    {
+        return 'composer';
+    }
+
     public function getName()
     {
         return 'Composer';

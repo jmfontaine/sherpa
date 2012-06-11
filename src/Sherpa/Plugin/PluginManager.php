@@ -33,6 +33,12 @@ class PluginManager
         return $this->config;
     }
 
+    /**
+     * @param $name
+     *
+     * @return \Sherpa\Plugin\PluginInterface
+     * @throws \OutOfBoundsException
+     */
     public function getPlugin($name)
     {
         if (!array_key_exists($name, $this->plugins)) {
