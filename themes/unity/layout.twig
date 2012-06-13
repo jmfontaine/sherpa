@@ -1,0 +1,68 @@
+{% import "theme/unity/macros.twig" as unity_macros %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <meta charset="utf-8">
+        {% block title %}<title>Sherpa report</title>{% endblock %}
+        <meta name="description" content="Sherpa report">
+
+        <!-- HTML5 shim, for IE6-8 support of HTML 5 elements -->
+        <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="assets/css/docs.css" rel="stylesheet">
+        <link href="assets/css/sherpa.css" rel="stylesheet">
+        {% endblock %}
+    </head>
+
+    <body class="sherpa" data-spy="scroll" data-target=".subnav" data-offset="10">
+
+        {% block navbar %}
+        <!-- ==================== Navigation bar ==================== -->
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <span class="brand">Sherpa report</span>
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li><a href="index.html">Project</a></li>
+                            <li><a href="items.html">Items</a></li>
+                            <li><a href="plugins.html">Plugins</a></li>
+                            <li><a href="configuration.html">Configuration</a></li>
+                        </ul>
+
+                        <ul class="nav pull-right">
+                            <li><a href="https://github.com/jmfontaine/sherpa">About Sherpa</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+
+        {% block container %}
+        <div class="container">
+            {% block content %}{% endblock %}
+
+            <!-- ==================== Footer ==================== -->
+            <footer class="footer">
+                {% block footer %}
+                <p>Report generated on june 13rd 2012 at 14:11 by <a href="https://github.com/jmfontaine/sherpa">Sherpa</a></p>
+                {% endblock %}
+            </footer>
+
+        </div>
+        {% endblock %}
+
+        {% block javascript %}
+        <script src="assets/js/jquery.js"></script>
+        <script src="assets/js/bootstrap-scrollspy.js"></script>
+        <script src="assets/js/application.js"></script>
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,15 @@
+{% extends "theme/unity/layout.twig" %}
+
+{% block content %}
+<!-- ==================== Content ==================== -->
+<header class="jumbotron subhead" id="overview">
+    <h1>Project</h1>
+</header>
+
+<section id="infos">
+    <dl class="dl-horizontal">
+        <dt>Path</dt>
+        <dd>{{ report.project.realPath }}</dd>
+    </dl>
+</section>
+{% endblock %}

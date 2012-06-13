@@ -1,0 +1,16 @@
+{% extends "theme/unity/layout.twig" %}
+
+{% block content %}
+<!-- ==================== Content ==================== -->
+<header class="jumbotron subhead" id="overview">
+    <h1>Plugins</h1>
+</header>
+
+<section id="infos">
+    <ul>
+        {% for plugin in report.plugins.pluginManager.plugins %}
+        <li><a href="{{ unity_macros.plugin_link(plugin.code) }}">{{ plugin.name }}</a></li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

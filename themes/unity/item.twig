@@ -1,0 +1,46 @@
+{% extends "theme/unity/layout.twig" %}
+
+{% block content %}
+    <!-- ==================== Content ==================== -->
+    <header id="overview" class="jumbotron subhead">
+        <h1>{{ item.relativePath }}</h1>
+    </header>
+
+    <section id="infos">
+        <div class="page-header">
+            <h2>Infos</h2>
+        </div>
+
+        <dl class="dl-horizontal">
+            <dt>Type</dt>
+            <dd>{{ item.type }}</dd>
+            <dt>Path</dt>
+            <dd>{{ item.realPath }}</dd>
+        </dl>
+    </section>
+
+    <header id="plugins" class="jumbotron subhead">
+        <div class="page-header">
+            <h2>Plugins</h2>
+        </div>
+        <div class="subnav">
+            <ul class="nav nav-pills">
+                {% for plugin in item.plugins %}
+                <li class=""><a href="#plugin-{{ plugin.code }}">{{ plugin.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </header>
+
+    {% for plugin in item.plugins %}
+    <section id="plugin-{{ plugin.code }}">
+        <div class="page-header">
+            <h3>{{ plugin.name }}</h3>
+
+            {% set data = attribute(plugin, 'analyze', [item]) %}
+            {% include "plugin/" ~ plugin.code ~ "/item.twig" %}
+            {% set data = null %}
+        </div>
+    </section>
+    {% endfor %}
+{% endblock %}

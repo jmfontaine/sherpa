@@ -1,0 +1,16 @@
+{% extends "theme/unity/layout.twig" %}
+
+{% block content %}
+<!-- ==================== Content ==================== -->
+<header class="jumbotron subhead" id="overview">
+    <h1>Items</h1>
+</header>
+
+<section id="infos">
+    <ul>
+        {% for item in report.items %}
+        <li><a href="{{ unity_macros.item_link(item.realpath) }}">{{ item.relativePath }}</a></li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

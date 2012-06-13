@@ -12,6 +12,7 @@ namespace Sherpa\Renderer;
 
 use Sherpa\FileSystem;
 use Sherpa\Report\Report;
+use Sherpa\Twig\Loader\Filesystem as FilesystemLoader;
 
 class TwigRenderer extends AbstractRenderer
 {
@@ -23,25 +24,19 @@ class TwigRenderer extends AbstractRenderer
 
     private $strictVariables = false;
 
-    private $theme = 'default';
+    private $theme = 'unity';
 
     public function render(Report $report)
     {
         $sherpaThemesDirectory = realpath(__DIR__ . '/../../../themes');
-        $themeName             = $this->getTheme();
-        $themeDirectory        = $sherpaThemesDirectory . '/' . $themeName;
+        $theme                 = $this->getTheme();
+        $themeDirectory        = $sherpaThemesDirectory . '/' . $theme;
 
-        // Is the theme shipped wth Sherpa?
-        if (!file_exists($themeDirectory)) {
-            // Then maybe we have be given the directory containing the theme
-            $themeDirectory = realpath($themeName);
-            if (false === $themeDirectory) {
-                throw new \RuntimeException("Could not load the theme ($themeName)");
-            }
-        }
+        $loader = new FilesystemLoader();
+        $loader->addThemePath($sherpaThemesDirectory)
+               ->addPluginPath(realpath(__DIR__ . '/../Plugin/'));
 
-        $loader = new \Twig_Loader_Filesystem($themeDirectory);
-        $twig = new \Twig_Environment($loader, array(
+        $twig   = new \Twig_Environment($loader, array(
             'cache'            => $this->getCache(),
             'charset'          => $this->getCharset(),
             'debug'            => $this->getDebug(),
@@ -56,7 +51,7 @@ class TwigRenderer extends AbstractRenderer
         $destinationDirectory = $this->getDestination();
 
         $this->prepareDestinationDirectory($destinationDirectory);
-        $this->renderTemplates($twig, $report, $destinationDirectory);
+        $this->renderTemplates($twig, $report, $theme, $destinationDirectory);
         $this->copyAssets($themeDirectory, $destinationDirectory);
     }
 
@@ -133,14 +128,14 @@ class TwigRenderer extends AbstractRenderer
         }
     }
 
-    protected function renderTemplates(\Twig_Environment $twig, Report $report, $destinationDirectory)
+    protected function renderTemplates(\Twig_Environment $twig, Report $report, $theme, $destinationDirectory)
     {
         // Main pages
         $templates = array(
-            'configuration.twig' => 'configuration.html',
-            'items.twig'         => 'items.html',
-            'plugins.twig'       => 'plugins.html',
-            'project.twig'       => 'index.html',
+            "theme/$theme/configuration.twig" => 'configuration.html',
+            "theme/$theme/items.twig"         => 'items.html',
+            "theme/$theme/plugins.twig"       => 'plugins.html',
+            "theme/$theme/project.twig"       => 'index.html',
         );
         foreach ($templates as $templateName => $destinationName) {
             $this->renderTemplate(
@@ -157,7 +152,7 @@ class TwigRenderer extends AbstractRenderer
             $this->renderTemplate(
                 $twig,
                 array('item' => $item),
-                'item.twig',
+                "theme/$theme/item.twig",
                 $destinationDirectory . '/' . $destinationName
             );
         }
@@ -168,7 +163,7 @@ class TwigRenderer extends AbstractRenderer
             $this->renderTemplate(
                 $twig,
                 array('plugin' => $plugin),
-                'plugin.twig',
+                "theme/$theme/plugin.twig",
                 $destinationDirectory . '/' . $destinationName
             );
         }

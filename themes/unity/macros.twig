@@ -1,0 +1,26 @@
+<!-- ==================== display_array ==================== -->
+{% macro display_array(array) %}
+    <ul>
+    {% for key, value in array %}
+        {% if is_array(value) %}
+            <li><strong>{{ key }}</strong>:
+                {{ _self.display_array(value) }}
+            </li>
+        {% elseif null == value %}
+            <li><strong>{{ key }}</strong>: <em>null</em></li>
+        {% else %}
+            <li><strong>{{ key }}</strong>: {{ value }}</li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endmacro %}
+
+<!-- ==================== item_link ==================== -->
+{% macro item_link(path) %}
+item-{{ md5(path) }}.html
+{% endmacro %}
+
+<!-- ==================== plugin_link ==================== -->
+{% macro plugin_link(code) %}
+plugin-{{ code }}.html
+{% endmacro %}

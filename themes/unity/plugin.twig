@@ -1,0 +1,10 @@
+{% extends "theme/unity/layout.twig" %}
+
+{% block content %}
+<!-- ==================== Content ==================== -->
+<header id="overview" class="jumbotron subhead">
+    <h1>{{ plugin.name }}</h1>
+</header>
+
+{% include "plugin/" ~ plugin.code ~ "/plugin.twig" %}
+{% endblock %}

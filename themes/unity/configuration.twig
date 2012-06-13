@@ -1,0 +1,12 @@
+{% extends "theme/unity/layout.twig" %}
+
+{% block content %}
+<!-- ==================== Content ==================== -->
+<header class="jumbotron subhead" id="overview">
+    <h1>Configuration</h1>
+</header>
+
+<section id="infos">
+    {{ unity_macros.display_array(report.config) }}
+</section>
+{% endblock %}
