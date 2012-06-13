@@ -7,6 +7,7 @@ class Core extends \Twig_Extension
     {
         return array(
             'is_array' => new \Twig_Function_Function('is_array'),
+            'md5'      => new \Twig_Function_Function('md5'),
         );
     }
 

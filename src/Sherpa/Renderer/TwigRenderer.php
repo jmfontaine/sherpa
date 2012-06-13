@@ -56,7 +56,7 @@ class TwigRenderer extends AbstractRenderer
         $destinationDirectory = $this->getDestination();
 
         $this->prepareDestinationDirectory($destinationDirectory);
-        $this->renderTemplates($twig, $report, $themeDirectory, $destinationDirectory);
+        $this->renderTemplates($twig, $report, $destinationDirectory);
         $this->copyAssets($themeDirectory, $destinationDirectory);
     }
 
@@ -133,18 +133,56 @@ class TwigRenderer extends AbstractRenderer
         }
     }
 
-    protected function renderTemplates(\Twig_Environment $twig, Report $report, $themeDirectory, $destinationDirectory)
+    protected function renderTemplates(\Twig_Environment $twig, Report $report, $destinationDirectory)
     {
-        foreach (glob("$themeDirectory/*.twig") as $templatePath) {
-            $templateName = basename($templatePath);
-            $destinationFile = substr($templateName, 0, -4) . 'html';
+        // Main pages
+        $templates = array(
+            'configuration.twig' => 'configuration.html',
+            'items.twig'         => 'items.html',
+            'plugins.twig'       => 'plugins.html',
+            'project.twig'       => 'index.html',
+        );
+        foreach ($templates as $templateName => $destinationName) {
+            $this->renderTemplate(
+                $twig,
+                array('report' => $report),
+                $templateName,
+                $destinationDirectory . '/' . $destinationName
+            );
+        }
 
-            $html = $twig->render($templateName, array('report' => $report));
-            file_put_contents($destinationDirectory . '/' . $destinationFile, $html);
+        // Items pages
+        foreach ($report->getItems() as $item) {
+            $destinationName = 'item-' . md5($item->getRealPath()) . '.html';
+            $this->renderTemplate(
+                $twig,
+                array('item' => $item),
+                'item.twig',
+                $destinationDirectory . '/' . $destinationName
+            );
+        }
+
+        // Plugins pages
+        foreach ($report->getPlugins()->getPluginManager()->getPlugins() as $plugin) {
+            $destinationName = 'plugin-' . $plugin->getCode() . '.html';
+            $this->renderTemplate(
+                $twig,
+                array('plugin' => $plugin),
+                'plugin.twig',
+                $destinationDirectory . '/' . $destinationName
+            );
         }
     }
 
-    protected function copyAssets($themeDirectory, $destinationDirectory)
+    protected function renderTemplate(\Twig_Environment $twig, array $context, $templateName, $destinationPath)
+    {
+        $html = $twig->render($templateName, $context);
+        file_put_contents($destinationPath, $html);
+
+        return $this;
+    }
+
+        protected function copyAssets($themeDirectory, $destinationDirectory)
     {
         if (!file_exists($themeDirectory . '/assets')) {
             return;
@@ -154,4 +192,3 @@ class TwigRenderer extends AbstractRenderer
         $fileSystem->copyDirectory($themeDirectory . '/assets', $destinationDirectory . '/assets');
     }
 }
-
