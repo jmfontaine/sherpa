@@ -46,10 +46,12 @@ class HashPlugin extends AbstractPlugin
 
     public function analyze(SplFileInfo $item)
     {
-        return array(
+        $data = array(
             'crc32' => hash('crc32', $item->getContent()),
             'md5'   => hash('md5', $item->getContent()),
             'sha1'  => hash('sha1', $item->getContent()),
         );
+
+        return new PluginResult($data);
     }
 }
