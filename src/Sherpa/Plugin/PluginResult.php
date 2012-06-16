@@ -19,18 +19,19 @@ class PluginResult
         $this->setData($data);
     }
 
-    function __get($name)
+    function __call($method, $arguments)
     {
-        if (!array_key_exists($name, $this->data)) {
-            throw new \OutOfBoundsException("Invalid property ($name)");
+        if ('get' === substr($method, 0, 3)) {
+            $propertyName = lcfirst(substr($method, 4));
+        } else {
+            $propertyName = $method;
         }
 
-        return $this->data[$name];
-    }
+        if (!array_key_exists($propertyName, $this->data)) {
+            throw new \OutOfBoundsException("Invalid method ($method)");
+        }
 
-    function __call($name, $arguments)
-    {
-
+        return $this->data[$propertyName];
     }
 
     public function setData($data)
