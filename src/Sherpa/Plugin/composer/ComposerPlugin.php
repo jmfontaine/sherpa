@@ -54,11 +54,5 @@ class ComposerPlugin extends AbstractPlugin
         );
 
         return new PluginResult($data);
-
-        return array(
-            'isDefinitionFile' => 'composer.json' === $item->getFilename(),
-            'isLockFile'       => 'composer.lock' === $item->getFilename(),
-            'isPharFile'       => 'composer.phar' === $item->getFilename(),
-        );
     }
 }
