@@ -8,8 +8,10 @@
  * @copyright 2012 Jean-Marc Fontaine <jm@jmfontaine.net>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
-namespace Sherpa\Plugin;
+namespace Sherpa\Plugin\Ohcount;
 
+use Sherpa\Plugin\AbstractPlugin;
+use Sherpa\Plugin\PluginResult;
 use Sherpa\SplFileInfo;
 use Symfony\Component\Process\Process;
 

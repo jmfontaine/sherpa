@@ -8,8 +8,10 @@
  * @copyright 2012 Jean-Marc Fontaine <jm@jmfontaine.net>
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  */
-namespace Sherpa\Plugin;
+namespace Sherpa\Plugin\Composer;
 
+use Sherpa\Plugin\AbstractPlugin;
+use Sherpa\Plugin\PluginResult;
 use Sherpa\SplFileInfo;
 use Symfony\Component\Process\Process;
 
@@ -45,6 +47,14 @@ class ComposerPlugin extends AbstractPlugin
 
     public function analyze(SplFileInfo $item)
     {
+        $data = array(
+            'isDefinitionFile' => 'composer.json' === $item->getFilename(),
+            'isLockFile'       => 'composer.lock' === $item->getFilename(),
+            'isPharFile'       => 'composer.phar' === $item->getFilename(),
+        );
+
+        return new PluginResult($data);
+
         return array(
             'isDefinitionFile' => 'composer.json' === $item->getFilename(),
             'isLockFile'       => 'composer.lock' === $item->getFilename(),

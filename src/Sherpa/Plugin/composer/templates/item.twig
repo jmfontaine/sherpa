@@ -1,1 +1,7 @@
 Composer item
+
+{{ plugin.name }}
+
+{% set data = attribute(plugin, 'analyze', [item]) %}
+
+{{ data.isDefinitionFile }}

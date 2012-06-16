@@ -103,7 +103,7 @@ class PluginManager
     private function instanciatePlugin($name, array $parameters)
     {
         $normalizedName = ucwords(str_replace('_', ' ', $name));
-        $className      = "Sherpa\\Plugin\\{$normalizedName}Plugin";
+        $className      = "Sherpa\\Plugin\\{$normalizedName}\\{$normalizedName}Plugin";
         $plugin         = new $className($parameters);
 
         return $plugin;
