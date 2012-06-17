@@ -9,3 +9,11 @@ body.sherpa .subhead h1 {
 body.sherpa .page-header {
     padding-bottom: 0;
 }
+
+body.sherpa .dl-horizontal dt {
+    width: 170px;
+}
+
+body.sherpa .dl-horizontal dd {
+    margin-left: 180px;
+}
