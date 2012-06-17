@@ -10,7 +10,7 @@
  */
 namespace Sherpa\Report\Section;
 
-class ConfigSection implements ReportSectionInterface, \Iterator
+class ConfigSection implements ReportSectionInterface, \IteratorAggregate
 {
     private $config;
 
@@ -33,39 +33,16 @@ class ConfigSection implements ReportSectionInterface, \Iterator
         return $this->config;
     }
 
-    /*
-     * \Iterator interface methods
-     */
-
-    public function current()
-    {
-        return current($this->config);
-    }
-
-    public function next()
-    {
-        return next($this->config);
-    }
-
-    public function key()
-    {
-        return key($this->config);
-    }
-
-    public function valid()
-    {
-        $key = key($this->config);
-
-        return $key !== NULL && $key !== FALSE;
-    }
-
-    public function rewind()
-    {
-        reset($this->config);
-    }
-
     public function toArray()
     {
         return $this->config;
+    }
+
+    /*
+     * \IteratorAggregate interface method
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->getConfig());
     }
 }
