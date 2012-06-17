@@ -41,7 +41,7 @@ class OhcountPlugin extends AbstractPlugin
         }
         $data = $this->parseLineCountOutput($process->getOutput());
 
-        return $data;
+        return new PluginResult($data);
     }
 
     public function getCode()

@@ -1,1 +1,10 @@
-Composer plugin
+<h3>Definition files</h3>
+<ul>
+{% for item in report.items %}
+    {% set data = attribute(plugin, 'analyze', [item]) %}
+    {%if data.isDefinitionFile %}
+    <li>{item.relativePath}</li>
+    {% endif %}
+{% endfor %}
+{% set data = null %}
+</ul>

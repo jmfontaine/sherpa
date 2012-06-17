@@ -151,7 +151,7 @@ class TwigRenderer extends AbstractRenderer
             $destinationName = 'item-' . md5($item->getRealPath()) . '.html';
             $this->renderTemplate(
                 $twig,
-                array('item' => $item),
+                array('item' => $item, 'report' => $report),
                 "theme/$theme/item.twig",
                 $destinationDirectory . '/' . $destinationName
             );
@@ -162,7 +162,7 @@ class TwigRenderer extends AbstractRenderer
             $destinationName = 'plugin-' . $plugin->getCode() . '.html';
             $this->renderTemplate(
                 $twig,
-                array('plugin' => $plugin),
+                array('plugin' => $plugin, 'report' => $report),
                 "theme/$theme/plugin.twig",
                 $destinationDirectory . '/' . $destinationName
             );

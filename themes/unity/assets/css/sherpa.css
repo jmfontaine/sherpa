@@ -1,7 +1,11 @@
 body.sherpa section {
-    padding-top: 20px;
+    padding-top: 0;
 }
 
 body.sherpa .subhead h1 {
     font-size: 34px;
+}
+
+body.sherpa .page-header {
+    padding-bottom: 0;
 }
