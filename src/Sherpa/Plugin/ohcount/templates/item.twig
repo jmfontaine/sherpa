@@ -1,1 +1,25 @@
-
+<dl class="dl-horizontal">
+    <dt>License</dt>
+    <dd>{{ data.license }}</dd>
+    <dt>Languages</dt>
+    <dd>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Lines of code</th>
+                    <th>Comment lines of code</th>
+                    <th>Blank lines</th>
+                </tr>
+            </thead>
+            {% for language in data.languages %}
+            <tr>
+                <th>{{ language.name }}</th>
+                <td>{{ language.linesOfCode }}</td>
+                <td>{{ language.commentLinesOfCode }}</td>
+                <td>{{ language.blankLines }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </dd>
+</dl>

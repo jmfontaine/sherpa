@@ -24,6 +24,14 @@ abstract class AbstractPlugin implements PluginInterface
         return true;
     }
 
+    public function getDataForItem(SplFileInfo $item)
+    {
+        $pluginClass = get_class($this);
+        $resultClass = substr($pluginClass, 0, -6) . 'PluginResult';
+
+        return new $resultClass($item);
+    }
+
     public function isInVcsDirectory(SplFileInfo $item)
     {
         // Bazaar

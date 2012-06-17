@@ -1,7 +1,7 @@
 <h3>Definition files</h3>
 <ul>
 {% for item in report.items %}
-    {% set data = attribute(plugin, 'analyze', [item]) %}
+    {% set data = attribute(plugin, 'getDataForItem', [item]) %}
     {%if data.isDefinitionFile %}
     <li>{item.relativePath}</li>
     {% endif %}

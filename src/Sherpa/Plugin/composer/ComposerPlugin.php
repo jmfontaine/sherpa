@@ -11,9 +11,7 @@
 namespace Sherpa\Plugin\Composer;
 
 use Sherpa\Plugin\AbstractPlugin;
-use Sherpa\Plugin\PluginResult;
 use Sherpa\SplFileInfo;
-use Symfony\Component\Process\Process;
 
 class ComposerPlugin extends AbstractPlugin
 {
@@ -43,16 +41,5 @@ class ComposerPlugin extends AbstractPlugin
     public function getVersion()
     {
         return '0.1-dev';
-    }
-
-    public function analyze(SplFileInfo $item)
-    {
-        $data = array(
-            'isDefinitionFile' => 'composer.json' === $item->getFilename(),
-            'isLockFile'       => 'composer.lock' === $item->getFilename(),
-            'isPharFile'       => 'composer.phar' === $item->getFilename(),
-        );
-
-        return new PluginResult($data);
     }
 }

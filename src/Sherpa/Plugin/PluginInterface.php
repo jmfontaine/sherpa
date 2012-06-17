@@ -16,9 +16,9 @@ interface PluginInterface
 {
     public function accept(SplFileInfo $item);
 
-    public function analyze(SplFileInfo $item);
-
     public function getCode();
+
+    public function getDataForItem(SplFileInfo $item);
 
     public function getName();
 

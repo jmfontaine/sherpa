@@ -37,10 +37,20 @@
         <div class="page-header">
             <h3>{{ plugin.name }}</h3>
 
-            {% set data = attribute(plugin, 'analyze', [item]) %}
+            {% set data = attribute(plugin, 'getDataForItem', [item]) %}
             {% include "plugin/" ~ plugin.code ~ "/item.twig" %}
             {% set data = null %}
         </div>
     </section>
     {% endfor %}
+
+    <header id="content" class="jumbotron subhead">
+        <div class="page-header">
+            <h2>Content</h2>
+        </div>
+    </header>
+
+    <section id="display-content">
+        <pre>{{ item.content }}</pre>
+    </section>
 {% endblock %}
