@@ -3,7 +3,7 @@
     <dd>{{ data.license }}</dd>
     <dt>Languages</dt>
     <dd>
-        <table class="table">
+        <table class="table table-striped table-condensed">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -12,14 +12,16 @@
                     <th>Blank lines</th>
                 </tr>
             </thead>
+            <tbody>
             {% for language in data.languages %}
             <tr>
-                <th>{{ language.name }}</th>
+                <td>{{ language.name }}</td>
                 <td>{{ language.linesOfCode }}</td>
                 <td>{{ language.commentLinesOfCode }}</td>
                 <td>{{ language.blankLines }}</td>
             </tr>
             {% endfor %}
+            </tbody>
         </table>
     </dd>
 </dl>
