@@ -74,6 +74,8 @@ abstract class AbstractPlugin implements PluginInterface
 
     public function loadConfig(array $config)
     {
-        // Do nothing
+        // Do specific actions in concrete classes if needed
+
+        return $this;
     }
 }
