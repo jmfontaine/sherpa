@@ -1,1 +1,22 @@
-Ohcount plugin
+<table class="table table-striped table-condensed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Lines of code</th>
+        <th>Comment lines of code</th>
+        <th>Blank lines</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% set languages = attribute(plugin, 'getLanguages', [report.items.projectIterator]) %}
+    {% for language in languages %}
+    <tr>
+        <td>{{ language.name }}</td>
+        <td>{{ language.linesOfCode }}</td>
+        <td>{{ language.commentLinesOfCode }}</td>
+        <td>{{ language.blankLines }}</td>
+    </tr>
+    {% endfor %}
+    {% set languages = null %}
+    </tbody>
+</table>

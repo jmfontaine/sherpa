@@ -10,6 +10,7 @@
  */
 namespace Sherpa\Plugin\Ohcount;
 
+use Sherpa\Iterator\ProjectIterator;
 use Sherpa\Plugin\AbstractPlugin;
 use Sherpa\SplFileInfo;
 
@@ -41,6 +42,30 @@ class OhcountPlugin extends AbstractPlugin
     public function getVersion()
     {
         return '0.1-dev';
+    }
+
+    public function getLanguages(ProjectIterator $items)
+    {
+        $languages = array();
+
+        foreach ($items as $item) {
+            foreach ($this->getDataForItem($item)->getLanguages() as $language) {
+                if (array_key_exists($language['name'], $languages)) {
+                    $languages[$language['name']]['linesOfCode']        += $language['linesOfCode'];
+                    $languages[$language['name']]['commentLinesOfCode'] += $language['commentLinesOfCode'];
+                    $languages[$language['name']]['blankLines']         += $language['blankLines'];
+                } else {
+                    $languages[$language['name']] = array(
+                        'name'               => $language['name'],
+                        'linesOfCode'        => $language['linesOfCode'],
+                        'commentLinesOfCode' => $language['commentLinesOfCode'],
+                        'blankLines'         => $language['blankLines'],
+                    );
+                }
+            }
+        }
+
+        return $languages;
     }
 }
 
