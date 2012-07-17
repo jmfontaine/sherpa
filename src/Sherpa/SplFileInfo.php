@@ -14,44 +14,81 @@ use Sherpa\Plugin\PluginManager;
 
 class SplFileInfo extends \SplFileInfo
 {
-    private $fileInfo;
-
+    /**
+     * @var \Sherpa\Plugin\PluginManager Plugin manager
+     */
     private $pluginManager;
 
+    /**
+     * @var string Path of the project root
+     */
     private $projectRootPath;
 
-    public function __construct($filePath, PluginManager $pluginManager, $projectRootPath, \finfo $fileInfo = null)
+    /**
+     * Class constructor
+     *
+     * @param string        $itemPath        Path of the item
+     * @param PluginManager $pluginManager   Plugin manager
+     * @param string        $projectRootPath Path of the project root
+     *
+     * return void
+     */
+    public function __construct($itemPath, PluginManager $pluginManager, $projectRootPath)
     {
-        parent::__construct($filePath);
+        parent::__construct($itemPath);
 
-        $this->pluginManager   = $pluginManager;
-        $this->projectRootPath = $projectRootPath;
-
-        if (null === $fileInfo) {
-            $fileInfo = new \finfo();
-        }
-        $this->fileInfo = $fileInfo;
+        $this->setPluginManager($pluginManager)
+             ->setProjectRootPath($projectRootPath);
     }
 
+    /**
+     * Returns content if item is a file
+     *
+     * @return string          File content
+     * @throws \LogicException Thrown if item is not a file
+     */
     public function getContent()
     {
-        if ('file' === $this->getType()) {
-            return file_get_contents($this->getPathname());
+        if ('file' !== $this->getType()) {
+            throw new \LogicException('Content can only be retrieved for a file');
         }
 
-        throw new \LogicException('Content can only be retrieved for a file');
+        return file_get_contents($this->getPathname());
     }
 
+    /**
+     * Returns encoding if the item is a file
+     *
+     * @return mixed           File encoding
+     * @throws \LogicException Thrown if item is not a file
+     */
     public function getEncoding()
     {
-        return $this->fileInfo->file($this->getPathname(), FILEINFO_MIME_ENCODING | FILEINFO_PRESERVE_ATIME);
+        if ('file' !== $this->getType()) {
+            throw new \LogicException('Encoding can only be retrieved for a file');
+        }
+
+        return $this->getFileInfo()->file($this->getPathname(), FILEINFO_MIME_ENCODING | FILEINFO_PRESERVE_ATIME);
     }
 
+    /**
+     * Returns MIME type if the item is a file
+     *
+     * @return mixed           File MIME type
+     * @throws \LogicException Thrown if item is not a file
+     */
     public function getMimeType()
     {
-        return $this->fileInfo->file($this->getPathname(), FILEINFO_MIME_TYPE | FILEINFO_PRESERVE_ATIME);
+        if ('file' !== $this->getType()) {
+            throw new \LogicException('MIME type can only be retrieved for a file');
+        }
+
+        return $this->getFileInfo()->file($this->getPathname(), FILEINFO_MIME_TYPE | FILEINFO_PRESERVE_ATIME);
     }
 
+    /**
+     * @return string Relative path for the item
+     */
     public function getRelativePath()
     {
         $offset = strlen($this->projectRootPath);
@@ -59,16 +96,41 @@ class SplFileInfo extends \SplFileInfo
         return substr($this->getRealPath(), $offset);
     }
 
-    public function getPlugin($pluginName)
+    /**
+     * @param string $pluginName Name of the plugin to retrieve data from
+     *
+     * @return \Sherpa\Plugin\PluginResultInterface Data for the plugin
+     */
+    public function getPluginData($pluginName)
     {
-        return $this->getPluginManager()->getPlugin($pluginName)->analyze($this);
+        return $this->getPluginManager()->getPlugin($pluginName)->getDataForItem($this);
     }
 
+    /**
+     * @param string $pluginName Name of the plugin to retrieve
+     *
+     * @return \Sherpa\Plugin\PluginInterface Plugin
+     */
+    public function getPlugin($pluginName)
+    {
+        return $this->getPluginManager()->getPlugin($pluginName);
+    }
+
+    /**
+     * Returns the registered plugins
+     *
+     * @return array Registered plugins
+     */
     public function getPlugins()
     {
         return $this->getPluginManager()->getPlugins();
     }
 
+    /**
+     * Returns itme data as an array
+     *
+     * @return array Item data
+     */
     public function toArray()
     {
         $data = array(
@@ -94,23 +156,28 @@ class SplFileInfo extends \SplFileInfo
         $data['link_target'] = $this->isLink() ? $this->getLinkTarget() : null;
 
         foreach ($this->getPluginManager()->getPlugins() as $plugin) {
-            $data['plugins'][$plugin->getCode()] = $plugin->analyze($this);
+            $data['plugins'][$plugin->getCode()] = $plugin->getDataForItem($this);
         }
         return $data;
     }
 
-    protected function getPluginManager()
+    /**
+     * Returns plugin manager
+     *
+     * @return \Sherpa\Plugin\PluginManager Plugin manager
+     */
+    public function getPluginManager()
     {
         return $this->pluginManager;
     }
 
-    protected function setFileInfo(\finfo $fileInfo)
-    {
-        $this->fileInfo = $fileInfo;
-
-        return $this;
-    }
-
+    /**
+     * Defines the plugin manager
+     *
+     * @param \Sherpa\Plugin\PluginManager $pluginManager Plugin manager
+     *
+     * @return \Sherpa\SplFileInfo Current instance to allow method call chaining
+     */
     protected function setPluginManager(PluginManager $pluginManager)
     {
         $this->pluginManager = $pluginManager;
@@ -118,14 +185,31 @@ class SplFileInfo extends \SplFileInfo
         return $this;
     }
 
+    /**
+     * Returns the path of project root
+     *
+     * @param string $projectRootPath Path of project root
+     *
+     * @return \Sherpa\SplFileInfo Current instance to allow method call chaining
+     */
     protected function setProjectRootPath($projectRootPath)
     {
+        if (!is_string($projectRootPath)) {
+            $type = gettype($projectRootPath);
+            throw new \InvalidArgumentException("Project root path must be a string. $type given");
+        }
+
         $this->projectRootPath = $projectRootPath;
 
         return $this;
     }
 
-    protected function getProjectRootPath()
+    /**
+     * Returns path of project root
+     *
+     * @return string Path of project root
+     */
+    public function getProjectRootPath()
     {
         return $this->projectRootPath;
     }
