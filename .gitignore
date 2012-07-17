@@ -1,2 +1,4 @@
 bin/composer.phar
+tests/_coverage
 vendor/*
+phpunit.xml
