@@ -10,9 +10,10 @@
  */
 namespace Sherpa\Plugin;
 
+use Sherpa\Plugin\PluginResultInterface;
 use Sherpa\SplFileInfo;
 
-class AbstractPluginResult
+class AbstractPluginResult implements PluginResultInterface
 {
     private $item;
 
