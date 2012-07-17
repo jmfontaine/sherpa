@@ -1,12 +1,15 @@
 {
-    "name": "Sherpa",
+    "name": "jmfontaine/sherpa",
     "description": "Sherpa is your friendly and tireless helper",
+    "type": "library",
     "license": "BSD-3-Clause",
+    "homepage": "http://github.com/jmfontaine/sherpa",
     "authors": [
         {
             "name": "Jean-Marc Fontaine",
             "email": "jm@jmfontaine.net",
-            "homepage": "http://jmfontaine.net/"
+            "homepage": "http://jmfontaine.net/",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -21,5 +24,9 @@
             "Sherpa": "src/",
             "Twig_" : "vendor/twig/twig/lib"
         }
-    }
+    },
+    "support": {
+        "issues": "https://github.com/jmfontaine/sherpa/issues"
+    },
+    "minimum-stability": "dev"
 }
